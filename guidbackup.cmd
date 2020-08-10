@@ -1,6 +1,6 @@
 @ECHO OFF
 
-::v0.2 First Github release
+::v0.3 Minor update for ping delay
 ::Creates a diskpart script to list volumes, based on result jump to assign a letter or unassign (for letter script, probably not necessary here)
 echo list volume > lsvol.tmp
 diskpart /s lsvol.tmp > lsvolresult.tmp
@@ -19,12 +19,12 @@ set stripguid=%guid:~0,-1%
 ::ECHO %guid%
 ::ECHO %stripguid%
 ::Wait 10s before removing drive letter
-PING 1.1.1.1 -n 1 -w 10000 >NUL
+PING localhost -n 10 >NUL
 :Unassign
 for /f "tokens=1,2 delims= " %%a in ('type lsvolresult.tmp ^| find /i "BACKUP"') do echo select %%a %%b > unassign.tmp
 echo remove >> unassign.tmp
 diskpart /s unassign.tmp
-PING 1.1.1.1 -n 1 -w 10000 >NUL
+PING localhost -n 10 >NUL
 
 :Cleanup
 del /q unassign.tmp
